@@ -97,6 +97,8 @@ sub addStack
 
   if ($local)
     {
+      $decl->parentNode->insertAfter (&s ("#include \"stack.head.h\""), $decl);
+      $decl->parentNode->insertAfter (&t ("\n"), $decl);
       $decl->parentNode->insertAfter (&s ("TYPE(STACK) :: YLSTACK"), $decl);
       $decl->parentNode->insertAfter (&t ("\n"), $decl);
     }
@@ -208,6 +210,15 @@ sub addStack
     }
 
   $C->unbindNode ();
+
+
+  my ($end) = &F ('./object/file/program-unit/end-subroutine-stmt', $d);
+
+  for my $stmt (&n ("<contains-stmt>CONTAINS</contains-stmt>"), &t ("\n"), &s ("#include \"stack.tail.h\""), &t ("\n"))
+    {
+      $end->parentNode->insertBefore ($stmt, $end);
+    }
+
 
 }
 
